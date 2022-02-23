@@ -3,12 +3,13 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import status
+from routers import image, status
 
 load_dotenv()
 
 app = FastAPI()
 app.include_router(status.router)
+app.include_router(image.router)
 
 app.add_middleware(
     CORSMiddleware,
