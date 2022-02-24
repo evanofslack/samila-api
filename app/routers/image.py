@@ -1,10 +1,19 @@
+from cProfile import label
+
 import matplotlib.colors as colors
+import matplotlib.font_manager
+import matplotlib.pyplot as plt
 from equations import combos
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from samila import GenerativeImage
 from samila.functions import save_fig_buf
 from samila.params import VALID_COLORS, Projection
+
+matplotlib.font_manager.findSystemFonts(fontpaths=None, fontext="ttf")[:10]
+font_dir = ["/Users/evan/Downloads/Montserrat"]
+for font in matplotlib.font_manager.findSystemFonts(font_dir):
+    matplotlib.font_manager.fontManager.addfont(font)
 
 router = APIRouter(
     tags=["image"],
@@ -18,18 +27,21 @@ async def generative_image(
     color: str | None = None,
     bg: str | None = None,
     seed: int | None = None,
+    text: str | None = None,
+    loc: str | None = None,
 ):
     """
     Generate image with Samila
     """
 
-    print(eq, proj, color, bg)
+    print(eq, proj, color, bg, seed)
 
     # EQUATIONS
     f1, f2 = None, None
     if eq != None:
         try:
             f1, f2 = combos[eq]
+            print(f1, f2)
         # Out of range of defined combos
         except IndexError:
             pass
@@ -77,6 +89,26 @@ async def generative_image(
     g = GenerativeImage(f1, f2)
     g.generate(seed=s)
     g.plot(projection=p, color=c, bgcolor=b)
+
+    # TEXT
+
+    if text != None:
+        plt.legend(frameon=False)
+        plt.text(
+            # 10,
+            # 10,
+            0.05,
+            0.9,
+            text,
+            color="white",
+            fontsize=48,
+            # ha="",
+            # va="top",
+            transform=g.fig.transFigure,
+            fontweight=700,
+            fontstretch=100,
+            fontfamily="montserrat",
+        )
 
     # WRITE BINARY IMAGE
     resp = save_fig_buf(g.fig)
