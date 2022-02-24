@@ -9,6 +9,7 @@ samila = "*"
 uvicorn = "*"
 python-dotenv = "*"
 pydantic = "*"
+pillow = "*"
 
 [dev-packages]
 black = "*"
