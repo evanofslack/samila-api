@@ -17,6 +17,7 @@ async def generative_image(
     proj: str | None = None,
     color: str | None = None,
     bg: str | None = None,
+    seed: int | None = None,
 ):
     """
     Generate image with Samila
@@ -67,8 +68,13 @@ async def generative_image(
                 print(e)
                 print(f"{bg} is an invalid color")
 
+    # SEED
+    s = None
+    if seed != None:
+        s = seed
+
     g = GenerativeImage(f1, f2)
-    g.generate()
+    g.generate(seed=s)
     g.plot(projection=p, color=c, bgcolor=b)
 
     resp = save_fig_buf(g.fig)
@@ -78,4 +84,6 @@ async def generative_image(
 
     buffer = resp["buffer"]
     buffer.seek(0)
-    return StreamingResponse(content=buffer, media_type="image/png")
+
+    headers = {"X-Seed": str(g.seed)}
+    return StreamingResponse(content=buffer, headers=headers, media_type="image/png")
