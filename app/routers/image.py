@@ -73,17 +73,20 @@ async def generative_image(
     if seed != None:
         s = seed
 
+    # GENERATE IMAGE
     g = GenerativeImage(f1, f2)
     g.generate(seed=s)
     g.plot(projection=p, color=c, bgcolor=b)
 
+    # WRITE BINARY IMAGE
     resp = save_fig_buf(g.fig)
     if not resp["status"]:
         print("Could not save image to buffer")
         return None
-
     buffer = resp["buffer"]
     buffer.seek(0)
 
+    # ADD SEED AS HEADER
     headers = {"X-Seed": str(g.seed)}
+
     return StreamingResponse(content=buffer, headers=headers, media_type="image/png")
