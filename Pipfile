@@ -10,6 +10,7 @@ uvicorn = "*"
 python-dotenv = "*"
 pydantic = "*"
 pillow = "*"
+gunicorn = "*"
 
 [dev-packages]
 black = "*"
