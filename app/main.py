@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from config import get_fonts
-from routers import image, status
+from app.config import get_fonts
+from app.routers import image, status
 
 load_dotenv()
 

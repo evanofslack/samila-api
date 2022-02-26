@@ -2,7 +2,7 @@ from typing import Callable, Optional, Tuple
 
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
-from equations import combos
+from app.equations import combos
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from samila import GenerativeImage
@@ -101,6 +101,34 @@ def write_image(g: GenerativeImage):
 
 
 @router.get("/image", responses={200: {"content": {"image/png": {}}}})
+async def generative_image(
+    eq: int | None = None,
+    proj: str | None = None,
+    color: str | None = None,
+    bg: str | None = None,
+    seed: int | None = None,
+    text: str | None = None,
+):
+    """
+    Generate image with Samila
+
+    """
+
+    print(eq, proj, color, bg, seed, text)
+
+    f1, f2 = handle_eq(eq)  # Equations
+    p = handle_proj(proj)  # Projection
+    c = handle_color(color)  # Line Color
+    b = handle_color(bg)  # Background Color
+    s = handle_seed(seed)  # Seed
+    g = create_image(f1, f2, p, c, b, s, text)  # Generate Image
+    buffer = write_image(g)  # Write image to buffer
+    headers = {"X-Seed": str(g.seed)}  # Add seed as header
+
+    return StreamingResponse(content=buffer, headers=headers, media_type="image/png")
+
+
+@router.get("/image/random", responses={200: {"content": {"image/png": {}}}})
 async def generative_image(
     eq: int | None = None,
     proj: str | None = None,
