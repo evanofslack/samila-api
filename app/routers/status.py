@@ -1,5 +1,4 @@
-from app.config import Settings, get_settings
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 router = APIRouter(
     tags=["status"],
@@ -7,12 +6,20 @@ router = APIRouter(
 
 
 @router.get("/")
-async def pong(settings: Settings = Depends(get_settings)):
+async def main():
     """
     Return app settings
     """
     return {
-        "message": "Hello World",
-        "environment": settings.environment,
-        "testing": settings.testing,
+        "message": "Welcome to Samila API",
+    }
+
+
+@router.get("/ping")
+async def pong():
+    """
+    Return app settings
+    """
+    return {
+        "message": "pong",
     }
