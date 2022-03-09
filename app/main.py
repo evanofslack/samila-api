@@ -22,7 +22,7 @@ app.add_middleware(
 
 
 @app.on_event("startup")
-async def load_fonts():
+def load_fonts():
     get_fonts()
 
 

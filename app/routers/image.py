@@ -51,7 +51,7 @@ def handle_color(color: str) -> Optional[str | Tuple[float, float, float]]:
     return c
 
 
-def handle_seed(seed: int) -> Optional[int]:
+def handle_seed(seed: str) -> Optional[str]:
     s = None
     if seed != None:
         s = seed
@@ -59,7 +59,6 @@ def handle_seed(seed: int) -> Optional[int]:
 
 
 def handle_text(g: GenerativeImage, text: str) -> None:
-
     if text != None:
         plt.text(
             0.05,
@@ -74,18 +73,26 @@ def handle_text(g: GenerativeImage, text: str) -> None:
         )
 
 
+def handle_spot_size(spot_size: int) -> Optional[int]:
+    spot = None
+    if spot_size != None and spot_size <= 1.0 and spot_size >= 0.0:
+        spot = spot_size
+    return spot
+
+
 def create_image(
     f1: Optional[Callable],
     f2: Optional[Callable],
     proj: Optional[str],
     color: Optional[str | Tuple[float, float, float]],
     bg: Optional[str | Tuple[float, float, float]],
+    spot: Optional[int],
     seed: Optional[str],
     text: Optional[str],
 ) -> GenerativeImage:
     g = GenerativeImage(f1, f2)
     g.generate(seed=seed)
-    g.plot(projection=proj, color=color, bgcolor=bg)
+    g.plot(projection=proj, color=color, bgcolor=bg, spot_size=spot)
     handle_text(g, text=text)  # Add Title
     return g
 
@@ -106,6 +113,7 @@ async def generative_image(
     proj: str | None = None,
     color: str | None = None,
     bg: str | None = None,
+    spot: int | None = None,
     seed: int | None = None,
     text: str | None = None,
 ):
@@ -120,8 +128,9 @@ async def generative_image(
     p = handle_proj(proj)  # Projection
     c = handle_color(color)  # Line Color
     b = handle_color(bg)  # Background Color
+    ss = handle_spot_size(spot)  # Spot Size
     s = handle_seed(seed)  # Seed
-    g = create_image(f1, f2, p, c, b, s, text)  # Generate Image
+    g = create_image(f1, f2, p, c, b, ss, s, text)  # Generate Image
     buffer = write_image(g)  # Write image to buffer
     headers = {"X-Seed": str(g.seed)}  # Add seed as header
 
@@ -134,6 +143,7 @@ async def generative_image(
     proj: str | None = None,
     color: str | None = None,
     bg: str | None = None,
+    spot: int | None = None,
     seed: int | None = None,
     text: str | None = None,
 ):
@@ -148,6 +158,7 @@ async def generative_image(
     p = handle_proj(proj)  # Projection
     c = handle_color(color)  # Line Color
     b = handle_color(bg)  # Background Color
+    ss = handle_spot_size(spot)  # Spot Size
     s = handle_seed(seed)  # Seed
     g = create_image(f1, f2, p, c, b, s, text)  # Generate Image
     buffer = write_image(g)  # Write image to buffer
