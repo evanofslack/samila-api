@@ -51,6 +51,13 @@ def handle_color(color: str) -> Optional[str | Tuple[float, float, float]]:
     return c
 
 
+def handle_spot_size(spot_size: float) -> Optional[float]:
+    spot = None
+    if spot_size != None and spot_size <= 1.0 and spot_size >= 0.0:
+        spot = spot_size
+    return spot
+
+
 def handle_seed(seed: str) -> Optional[str]:
     s = None
     if seed != None:
@@ -73,20 +80,13 @@ def handle_text(g: GenerativeImage, text: str) -> None:
         )
 
 
-def handle_spot_size(spot_size: int) -> Optional[int]:
-    spot = None
-    if spot_size != None and spot_size <= 1.0 and spot_size >= 0.0:
-        spot = spot_size
-    return spot
-
-
 def create_image(
     f1: Optional[Callable],
     f2: Optional[Callable],
     proj: Optional[str],
     color: Optional[str | Tuple[float, float, float]],
     bg: Optional[str | Tuple[float, float, float]],
-    spot: Optional[int],
+    spot: Optional[float],
     seed: Optional[str],
     text: Optional[str],
 ) -> GenerativeImage:
