@@ -113,7 +113,7 @@ async def generative_image(
     proj: str | None = None,
     color: str | None = None,
     bg: str | None = None,
-    spot: int | None = None,
+    spot: float | None = None,
     seed: int | None = None,
     text: str | None = None,
 ):
@@ -143,7 +143,7 @@ async def generative_image(
     proj: str | None = None,
     color: str | None = None,
     bg: str | None = None,
-    spot: int | None = None,
+    spot: float | None = None,
     seed: int | None = None,
     text: str | None = None,
 ):
@@ -160,7 +160,7 @@ async def generative_image(
     b = handle_color(bg)  # Background Color
     ss = handle_spot_size(spot)  # Spot Size
     s = handle_seed(seed)  # Seed
-    g = create_image(f1, f2, p, c, b, s, text)  # Generate Image
+    g = create_image(f1, f2, p, c, b, ss, s, text)  # Generate Image
     buffer = write_image(g)  # Write image to buffer
     headers = {"X-Seed": str(g.seed)}  # Add seed as header
 
