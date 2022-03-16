@@ -48,8 +48,25 @@ def f8(x, y):
     return random.uniform(-1, 1) * x * y * math.atan(abs(x - y)) * math.cos(x / y)
 
 
-equations: List[callable] = [f1, f2, f3, f4, f5, f6, f7, f8]
+def f9(x, y):
+    return random.uniform(-1, 1) * math.cos(math.cos(x)) * math.sin(math.sin(y)) + x * y
+
+
+def f10(x, y):
+    return random.uniform(-1, 1) * x / y * math.cos(x / y) + math.sin(x / y)
+
+
+def f11(x, y):
+    return (
+        random.uniform(-1, 1) * math.sin(y) * x**3
+        + x
+        - y**2
+        + math.sin(x + x**2) * abs(x - y)
+    )
+
+
+equations: List[callable] = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11]
 combos: List[Tuple[callable]] = list(combinations(equations, 2))
 
 if __name__ == "__main__":
-    print(combos)
+    print(len(combos))
