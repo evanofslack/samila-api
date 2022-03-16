@@ -39,9 +39,7 @@ def f6(x, y):
 
 
 def f7(x, y):
-    return random.uniform(-1, 1) * math.sin(x * math.sin(y - x)) * abs(y) + math.cos(
-        y * x
-    )
+    return random.uniform(-1, 1) * (x * math.sin(y - x)) * abs(y) + math.cos(y * x)
 
 
 def f8(x, y):
@@ -67,3 +65,6 @@ def f11(x, y):
 
 equations: List[callable] = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11]
 combos: List[Tuple[callable]] = list(combinations(equations, 2))
+
+if __name__ == "__main__":
+    print(combos[42])
