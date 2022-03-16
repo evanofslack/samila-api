@@ -3,7 +3,7 @@ from typing import Callable, Optional, Tuple
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 from app.equations import combos
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks, Query
 from fastapi.responses import StreamingResponse
 from samila import GenerativeImage
 from samila.functions import save_fig_buf
@@ -88,12 +88,10 @@ def create_image(
     bg: Optional[str | Tuple[float, float, float]],
     spot: Optional[float],
     seed: Optional[str],
-    text: Optional[str],
 ) -> GenerativeImage:
     g = GenerativeImage(f1, f2)
     g.generate(seed=seed)
     g.plot(projection=proj, color=color, bgcolor=bg, spot_size=spot)
-    handle_text(g, text=text)  # Add Title
     return g
 
 
@@ -115,14 +113,13 @@ async def generative_image(
     bg: str | None = None,
     spot: float | None = None,
     seed: int | None = None,
-    text: str | None = None,
 ):
     """
     Generate image with Samila
 
     """
 
-    print(eq, proj, color, bg, seed, text)
+    print(eq, proj, color, bg, seed)
 
     f1, f2 = handle_eq(eq)  # Equations
     p = handle_proj(proj)  # Projection
@@ -130,37 +127,7 @@ async def generative_image(
     b = handle_color(bg)  # Background Color
     ss = handle_spot_size(spot)  # Spot Size
     s = handle_seed(seed)  # Seed
-    g = create_image(f1, f2, p, c, b, ss, s, text)  # Generate Image
-    buffer = write_image(g)  # Write image to buffer
-    headers = {"X-Seed": str(g.seed)}  # Add seed as header
-
-    return StreamingResponse(content=buffer, headers=headers, media_type="image/png")
-
-
-@router.get("/image/random", responses={200: {"content": {"image/png": {}}}})
-async def generative_image(
-    eq: int | None = None,
-    proj: str | None = None,
-    color: str | None = None,
-    bg: str | None = None,
-    spot: float | None = None,
-    seed: int | None = None,
-    text: str | None = None,
-):
-    """
-    Generate image with Samila
-
-    """
-
-    print(eq, proj, color, bg, seed, text)
-
-    f1, f2 = handle_eq(eq)  # Equations
-    p = handle_proj(proj)  # Projection
-    c = handle_color(color)  # Line Color
-    b = handle_color(bg)  # Background Color
-    ss = handle_spot_size(spot)  # Spot Size
-    s = handle_seed(seed)  # Seed
-    g = create_image(f1, f2, p, c, b, ss, s, text)  # Generate Image
+    g = create_image(f1, f2, p, c, b, ss, s)  # Generate Image
     buffer = write_image(g)  # Write image to buffer
     headers = {"X-Seed": str(g.seed)}  # Add seed as header
 
