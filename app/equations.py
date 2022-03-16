@@ -49,7 +49,7 @@ def f8(x, y):
 
 
 def f9(x, y):
-    return random.uniform(-1, 1) * math.cos(math.cos(x)) * math.sin(math.sin(y)) + x * y
+    return random.uniform(-1, 1) * math.cos(x - y) * math.sin(x + y) + x * y
 
 
 def f10(x, y):
