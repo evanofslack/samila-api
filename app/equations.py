@@ -67,6 +67,3 @@ def f11(x, y):
 
 equations: List[callable] = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11]
 combos: List[Tuple[callable]] = list(combinations(equations, 2))
-
-if __name__ == "__main__":
-    print(len(combos))

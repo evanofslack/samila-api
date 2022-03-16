@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.config import get_fonts
 from app.routers import image, status
 
 load_dotenv()
@@ -19,12 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-def load_fonts():
-    get_fonts()
-
 
 if __name__ == "__main__":
     uvicorn.run(
